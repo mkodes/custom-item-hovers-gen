@@ -1,43 +1,59 @@
 'use client'
 
-import { useState } from "react"
+import { JSX, ReactNode, useEffect, useState } from "react"
 import InputField from "./_components/Input"
 import AddInputs from "./_components/AddInputs"
+import InputGroup from "./_components/InputGroup"
 
 export default function Page() {
-  const [inputCountItems, setInputCountItems] = useState(0)
-  const [inputCountHovers, setInputCountHovers] = useState(0)
-  const [inputsItems, setInputsItems] = useState<string[]>([])
-  const [inputsHovers, setInputsHovers] = useState<string[]>([])
+  const [jsonObjectCount, setJsonObjectCount] = useState(0)
+  const [jsonObjects, setJsonObjects] = useState<React.ReactElement[]>([])
 
   async function genFile(formData: FormData) {
-    // Collect all item values
-    const itemValues: string[] = []
-    for (let i = 0; i < inputsItems.length; i++) {
-      const value = formData.get(`items-${i}`)
-      if (value && typeof value === 'string') {
-        itemValues.push(value)
+    const hoversArray = []
+
+    // Loop through each InputGroup
+    for (let i = 0; i < jsonObjectCount; i++) {
+      const itemValues = []
+      const hoverValues = []
+
+      // Collect items for this group
+      let itemIndex = 0
+      while (true) {
+        const itemValue = formData.get(`items-${i}-${itemIndex}`)
+        if (itemValue && typeof itemValue === 'string') {
+          itemValues.push(itemValue)
+          itemIndex++
+        } else {
+          break
+        }
+      }
+
+      // Collect hovers for this group
+      let hoverIndex = 0
+      while (true) {
+        const hoverValue = formData.get(`hovers-${i}-${hoverIndex}`)
+        if (hoverValue && typeof hoverValue === 'string') {
+          hoverValues.push(hoverValue)
+          hoverIndex++
+        } else {
+          break
+        }
+      }
+
+      // Add this group's data to the hovers array
+      if (itemValues.length > 0 || hoverValues.length > 0) {
+        hoversArray.push({
+          items: itemValues,
+          hovers: [hoverValues] // Wrapped in array as per your original example
+        })
       }
     }
 
-    // Collect all hover values
-    const hoverValues: string[] = []
-    for (let i = 0; i < inputsHovers.length; i++) {
-      const value = formData.get(`hovers-${i}`)
-      if (value && typeof value === 'string') {
-        hoverValues.push(value)
-      }
-    }
-
-    // Create the JSON structure
+    // Create the final JSON structure
     const jsonOutput = {
       "is_hover_map": "absolutely",
-      "hovers": [
-        {
-          "items": itemValues,
-          "hovers": [hoverValues] // Note: wrapped in array as per your example
-        }
-      ]
+      "hovers": hoversArray
     }
 
     // Convert to JSON string
@@ -55,76 +71,39 @@ export default function Page() {
     URL.revokeObjectURL(url)
   }
 
-  const addInputItems = () => {
-    setInputCountItems(prev => prev + 1)
-    setInputsItems(prev => [...prev, `input-${inputCountItems + 1}`])
+  const addInputGroup = () => {
+    setJsonObjectCount(prev => prev + 1)
+    setJsonObjects([...jsonObjects, <InputGroup key={jsonObjectCount} groupIndex={jsonObjectCount} />])
   }
 
-  const removeInputItems = (index: number) => {
-    setInputsItems(prev => prev.filter((_, i) => i !== index))
-    setInputCountItems(prev => prev - 1)
-  }
-
-  const addInputHovers = () => {
-    setInputCountHovers(prev => prev + 1)
-    setInputsHovers(prev => [...prev, `input-${inputCountHovers + 1}`])
-  }
-
-  const removeInputHovers = (index: number) => {
-    setInputsHovers(prev => prev.filter((_, i) => i !== index))
-    setInputCountHovers(prev => prev - 1)
+  const removeInputGroup = () => {
+    setJsonObjectCount(prev => prev - 1)
+    setJsonObjects(jsonObjects.slice(0, -1))
   }
 
   return (
     <div>
-      <form className="w-full" action={genFile}>
-        <div className="grid grid-cols-2 grid-rows-2 gap-2 bg-amber-200/20 border-2 border-zinc-800/50 rounded-md">
-          <div className="col-start-1">
-            <h3 className="text-center font-bold text-xl">Items</h3>
-            <div className="flex flex-col items-center space-y-2">
-              <AddInputs
-                inputCount={inputCountItems}
-                onAddInput={addInputItems}
-              />
+      <form className="w-full flex flex-col space-y-2" action={genFile}>
+        <button
+          className="p-2 rounded-md bg-blue-300 mx-auto"
+          type="button"
+          onClick={addInputGroup}
+        >
+          Add Input Group
+        </button>
+        <button
+          className="p-2 rounded-md bg-red-800 mx-auto"
+          type="button"
+          onClick={removeInputGroup}
+        >
+          Remove Input Group
+        </button>
 
-              {inputsItems.map((inputId, index) => (
-                <div className="space-x-2" key={inputId}>
-                  <InputField name="items" index={index} />
-                  <button
-                    className="bg-red-800 rounded-md p-2 text-gray-200"
-                    type="button"
-                    onClick={() => removeInputItems(index)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="col-start-2">
-            <h3 className="text-center font-bold text-xl">Hovers</h3>
-            <div className="flex flex-col items-center space-y-2">
-              <AddInputs
-                inputCount={inputCountHovers}
-                onAddInput={addInputHovers}
-              />
+        {jsonObjects}
 
-              {inputsHovers.map((inputId, index) => (
-                <div className="space-x-2" key={inputId}>
-                  <InputField name={"hovers"} index={index} />
-                  <button
-                    className="bg-red-800 rounded-md p-2 text-gray-200"
-                    type="button"
-                    onClick={() => removeInputHovers(index)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-          <button className="row-start-2 col-span-2 flex m-auto bg-green-800 text-gray-200 p-2 rounded-md hover:cursor-pointer" type="submit">Generate File</button>
-        </div>
+        <button className="mx-auto bg-green-800 text-gray-200 p-2 rounded-md hover:cursor-pointer" type="submit">
+          Generate File
+        </button>
       </form>
     </div>
   )
