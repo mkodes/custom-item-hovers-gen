@@ -1,0 +1,19 @@
+{
+    "is_hover_map": "absolutely",
+    "hovers": [
+        {
+            "items": [
+                "Item1",
+                "Item2",
+                "Item3"
+            ],
+            "hovers": [
+                [
+                    "Hover1",
+                    "Hover2",
+                    "Hover3"
+                ]
+            ]
+        }
+    ]
+}
