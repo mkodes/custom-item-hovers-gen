@@ -35,7 +35,7 @@ export default function Page() {
       "hovers": [
         {
           "items": itemValues,
-          "hovers": hoverValues // Note: wrapped in array as per your example
+          "hovers": [hoverValues] // Note: wrapped in array as per your example
         }
       ]
     }
