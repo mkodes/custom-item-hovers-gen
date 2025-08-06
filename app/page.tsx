@@ -1,9 +1,8 @@
 'use client'
 
-import { JSX, ReactNode, useEffect, useState } from "react"
-import InputField from "./_components/Input"
-import AddInputs from "./_components/AddInputs"
+import { useState } from "react"
 import InputGroup from "./_components/InputGroup"
+import UTFDropdown from "./_components/UTFDropdown"
 
 export default function Page() {
   const [jsonObjectCount, setJsonObjectCount] = useState(0)
@@ -45,7 +44,7 @@ export default function Page() {
       if (itemValues.length > 0 || hoverValues.length > 0) {
         hoversArray.push({
           items: itemValues,
-          hovers: [hoverValues] // Wrapped in array as per your original example
+          hovers: [hoverValues]
         })
       }
     }
@@ -56,8 +55,11 @@ export default function Page() {
       "hovers": hoversArray
     }
 
-    // Convert to JSON string
-    const jsonString = JSON.stringify(jsonOutput, null, 2)
+    // Convert to JSON string and fix the double-escaped unicode
+    let jsonString = JSON.stringify(jsonOutput, null, 2)
+
+    // Replace u\\xxxx with \uxxxx (your specific pattern)
+    jsonString = jsonString.replace(/u\\\\([0-9a-fA-F]{4})/g, '\\u$1')
 
     // Create and download the file
     const blob = new Blob([jsonString], { type: 'application/json' })
@@ -83,7 +85,8 @@ export default function Page() {
 
   return (
     <div>
-      <form className="w-full flex flex-col space-y-2" action={genFile}>
+      <div className="mx-auto space-x-2 space-y-2 p-2 w-fit">
+        <UTFDropdown />
         <button
           className="p-2 rounded-md bg-blue-300 mx-auto"
           type="button"
@@ -92,15 +95,15 @@ export default function Page() {
           Add Input Group
         </button>
         <button
-          className="p-2 rounded-md bg-red-800 mx-auto"
+          className="p-2 rounded-md text-gray-200 bg-red-800 mx-auto"
           type="button"
           onClick={removeInputGroup}
         >
           Remove Input Group
         </button>
-
+      </div>
+      <form className="w-full flex flex-col space-y-2" action={genFile}>
         {jsonObjects}
-
         <button className="mx-auto bg-green-800 text-gray-200 p-2 rounded-md hover:cursor-pointer" type="submit">
           Generate File
         </button>
