@@ -27,7 +27,7 @@ export default function UTFDropdown() {
             }
 
             const jsonData = await response.json();
-            setData(jsonData);
+            setData(jsonData.characters);
         } catch (err: any) {
             setError(err.message);
         } finally {
