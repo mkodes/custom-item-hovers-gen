@@ -1,3 +1,7 @@
+You can find this website at https://custom-item-hovers-gen.vercel.app
+
+# Running locally:
+
 Requirements:
 - Node.js version 20+
 
