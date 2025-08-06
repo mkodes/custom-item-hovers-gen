@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from "react"
 import InputGroup from "./_components/InputGroup"
 import UTFDropdown from "./_components/UTFDropdown"
@@ -55,10 +54,15 @@ export default function Page() {
       "hovers": hoversArray
     }
 
-    // Convert to JSON string and fix the double-escaped unicode
+    // Convert to JSON string with proper Unicode handling
     let jsonString = JSON.stringify(jsonOutput, null, 2)
 
-    // Replace u\\xxxx with \uxxxx (your specific pattern)
+    // Fix double-escaped Unicode characters
+    // This handles cases like \\u20bf -> \u20bf
+    jsonString = jsonString.replace(/\\\\u([0-9a-fA-F]{4})/g, '\\u$1')
+
+    // Alternative approach: you could also use this more comprehensive replacement
+    // that handles your specific pattern u\\xxxx -> \uxxxx
     jsonString = jsonString.replace(/u\\\\([0-9a-fA-F]{4})/g, '\\u$1')
 
     // Create and download the file

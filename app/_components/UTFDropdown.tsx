@@ -99,7 +99,7 @@ export default function UTFDropdown() {
                                             className={`text-2xl hover:bg-gray-700 hover:cursor-pointer p-1 rounded transition-colors relative ${copiedChar === item.char ? 'bg-green-600' : ''
                                                 }`}
                                             key={index}
-                                            onClick={() => copyToClipboard(item.char)}
+                                            onClick={() => copyToClipboard("\\u" + item.hex)}
                                             title={`Click to copy ${item.char} (${item.hex})`}
                                         >
                                             <p>{item.char}</p>
