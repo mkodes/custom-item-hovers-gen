@@ -90,13 +90,13 @@ export default function UTFDropdown() {
             {
                 data && !loading && (
                     <div>
-                        <button className={`flex mx-auto h-fit hover:cursor-pointer bg-zinc-800 text-gray-200 p-2 rounded-md`} onClick={() => setExpanded(!expanded)}>Copy a unicode character</button>
-                        <div className={`text-gray-200 absolute grid grid-cols-12 left-0 right-0 mx-auto justify-center w-fit ${expanded ? (`h-128 visible`) : `invisible`} overflow-y-scroll bg-gray-800 rounded-b-md p-2`}>
+                        <button className={`flex mx-auto h-fit hover:cursor-pointer p-2 rounded-md bg-button-uni border-2 border-border`} onClick={() => setExpanded(!expanded)}>Copy a unicode character</button>
+                        <div className={`bg-border absolute grid grid-cols-12 left-0 right-0 mx-auto justify-center w-fit ${expanded ? (`h-128 visible`) : `invisible`} overflow-y-scroll rounded-b-md p-2`}>
                             {
                                 expanded && (
                                     data.map((item, index) => (
                                         <div
-                                            className={`text-2xl hover:bg-gray-700 hover:cursor-pointer p-1 rounded transition-colors relative ${copiedChar === item.char ? 'bg-green-600' : ''
+                                            className={`text-2xl hover:hover:cursor-pointer p-1 rounded transition-colors relative ${copiedChar === item.char ? 'bg-green-600' : ''
                                                 }`}
                                             key={index}
                                             onClick={() => copyToClipboard("\\u" + item.hex)}
@@ -104,7 +104,7 @@ export default function UTFDropdown() {
                                         >
                                             <p>{item.char}</p>
                                             {copiedChar === item.char && (
-                                                <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded">
+                                                <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-xs px-2 py-1 rounded">
                                                     Copied!
                                                 </span>
                                             )}

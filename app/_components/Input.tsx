@@ -9,7 +9,7 @@ export default function InputField({ name, index }: InputFieldProps) {
             <input
                 type="text"
                 name={name}  // Use the name as-is, don't modify it
-                className="border-2 border-gray-800 rounded-sm"
+                className="border-2 rounded-sm"
                 placeholder={`Input ${index + 1}`}  // You can still use index for placeholder
             />
         </div>

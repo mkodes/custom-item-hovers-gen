@@ -1,1 +1,34 @@
 @import "tailwindcss";
+
+@theme {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-border: var(--border);
+    --color-button-action: var(--button-action);
+    --color-button-plus: var(--button-plus);
+    --color-button-minus: var(--button-minus);
+    --color-button-uni: var(--button-uni);
+}
+
+/* Move your theme definitions to a layer that has higher specificity */
+@layer base {
+    [data-theme='dark'] {
+        --background: oklch(27.8% 0.033 256.848);
+        --foreground: oklch(92.8% 0.006 264.531);
+        --border: oklch(55.6% 0 0);
+        --button-action: oklch(44.3% 0.11 240.79);
+        --button-plus: oklch(45.3% 0.124 130.933);
+        --button-minus: oklch(44.4% 0.177 26.899);
+        --button-uni: oklch(47.3% 0.137 46.201);
+    }
+
+    [data-theme='light'] {
+        --background: oklch(92.8% 0.006 264.531);
+        --foreground: oklch(27.8% 0.033 256.848);
+        --border: oklch(55.6% 0 0);
+        --button-action: oklch(90.1% 0.058 230.902);
+        --button-plus: oklch(93.8% 0.127 124.321);
+        --button-minus: oklch(88.5% 0.062 18.334);
+        --button-uni: oklch(92.4% 0.12 95.746);
+    }
+}

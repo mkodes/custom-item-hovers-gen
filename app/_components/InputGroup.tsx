@@ -31,8 +31,8 @@ export default function InputGroup({ groupIndex }: { groupIndex: number }) {
     }
 
     return (
-        <div className="grid grid-cols-2 grid-rows-1 gap-2 bg-amber-200/20 border-2 border-zinc-800/50 rounded-md p-4 mb-4">
-            <div className="col-start-1">
+        <div className="grid grid-cols-2 grid-rows-1 gap-2 border-2 rounded-md p-4 mb-4">
+            <div className="col-start-1 space-y-2">
                 <h3 className="text-center font-bold text-xl">Items (Group {groupIndex})</h3>
                 <div className="flex flex-col items-center space-y-2">
                     <AddInputs
@@ -41,10 +41,10 @@ export default function InputGroup({ groupIndex }: { groupIndex: number }) {
                     />
 
                     {inputsItems.map((inputId, index) => (
-                        <div className="space-x-2" key={inputId}>
+                        <div className="flex space-x-2 items-center" key={inputId}>
                             <InputField name={`items-${groupIndex}-${index}`} index={index} />
                             <button
-                                className="bg-red-800 rounded-md p-2 text-gray-200"
+                                className="rounded-md p-2 border-2 border-border bg-button-minus"
                                 type="button"
                                 onClick={() => removeInputItems(index)}
                             >
@@ -63,10 +63,10 @@ export default function InputGroup({ groupIndex }: { groupIndex: number }) {
                     />
 
                     {inputsHovers.map((inputId, index) => (
-                        <div className="space-x-2" key={inputId}>
+                        <div className="space-x-2 flex items-center" key={inputId}>
                             <InputField name={`hovers-${groupIndex}-${index}`} index={index} />
                             <button
-                                className="bg-red-800 rounded-md p-2 text-gray-200"
+                                className="rounded-md p-2 border-2 border-border bg-button-minus"
                                 type="button"
                                 onClick={() => removeInputHovers(index)}
                             >

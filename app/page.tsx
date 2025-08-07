@@ -1,11 +1,21 @@
 'use client'
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useTheme } from "next-themes"
 import InputGroup from "./_components/InputGroup"
 import UTFDropdown from "./_components/UTFDropdown"
+import ThemeChanger from "./_components/ThemeChanger"
 
 export default function Page() {
   const [jsonObjectCount, setJsonObjectCount] = useState(0)
   const [jsonObjects, setJsonObjects] = useState<React.ReactElement[]>([])
+  const { theme, setTheme } = useTheme()
+
+  // Convert theme to isDark boolean for your existing components
+  const isDark = theme === 'dark'
+
+  const handleThemeChange = (newIsDark: boolean) => {
+    setTheme(newIsDark ? 'dark' : 'light')
+  }
 
   async function genFile(formData: FormData) {
     const hoversArray = []
@@ -89,17 +99,18 @@ export default function Page() {
 
   return (
     <div>
+      <ThemeChanger />
       <div className="mx-auto space-x-2 space-y-2 p-2 w-fit">
         <UTFDropdown />
         <button
-          className="p-2 rounded-md bg-blue-300 mx-auto"
+          className="p-2 rounded-md mx-auto bg-button-plus border-2 border-border"
           type="button"
           onClick={addInputGroup}
         >
           Add Input Group
         </button>
         <button
-          className="p-2 rounded-md text-gray-200 bg-red-800 mx-auto"
+          className="p-2 rounded-md mx-auto bg-button-minus border-2 border-border"
           type="button"
           onClick={removeInputGroup}
         >
@@ -108,7 +119,7 @@ export default function Page() {
       </div>
       <form className="w-full flex flex-col space-y-2" action={genFile}>
         {jsonObjects}
-        <button className="mx-auto bg-green-800 text-gray-200 p-2 rounded-md hover:cursor-pointer" type="submit">
+        <button className="mx-auto p-2 rounded-md hover:cursor-pointer bg-button-action border-2 border-border" type="submit">
           Generate File
         </button>
       </form>

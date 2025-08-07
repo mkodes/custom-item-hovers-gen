@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from 'next-themes'
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,22 +24,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <title>Custom Item Hovers Gen</title>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <header className="bg-zinc-200 h-fit flex flex-col text-gray-800 p-2">
-          <h1 className="text-2xl text-center">Custom Items Hovers Generator</h1>
-        </header>
-        <main className="bg-zinc-400 flex flex-col grow text-gray-800 p-2">
-          {children}
-        </main>
-        <footer className="bg-zinc-600 h-fit flex flex-col text-gray-800 p-2">
-          <p className="text-right">&#169; MKodes</p>
-        </footer>
+        <ThemeProvider>
+          <header className="h-fit p-2 flex flex-col">
+            <h1 className="text-2xl text-center">Custom Items Hovers Generator</h1>
+          </header>
+          <div className="flex flex-col grow p-2">
+            {children}
+          </div>
+          <footer className="h-fit p-2 flex flex-col">
+            <p className="text-right">&#169; MKodes</p>
+          </footer>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -7,7 +7,7 @@ export default function AddInputs({ inputCount, onAddInput }: AddInputsProps) {
     return (
         <div className="flex items-center justify-center space-x-2">
             <p>Current inputs: {inputCount}</p>
-            <button className="p-2 bg-zinc-800/50 text-gray-200 rounded-md hover:cursor-pointer" type="button" onClick={onAddInput}>
+            <button className="border-2 border-border bg-button-plus p-2 rounded-md hover:cursor-pointer" type="button" onClick={onAddInput}>
                 Add Input
             </button>
         </div>
